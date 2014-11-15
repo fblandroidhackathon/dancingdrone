@@ -24,19 +24,20 @@ public final class R {
         public static final int cmd_down=0x7f080007;
         public static final int cmd_emergency=0x7f080000;
         public static final int cmd_forward=0x7f080001;
-        public static final int cmd_landing=0x7f080009;
+        public static final int cmd_freeze=0x7f080009;
+        public static final int cmd_landing=0x7f08000a;
         public static final int cmd_left=0x7f080002;
         public static final int cmd_right=0x7f080004;
         public static final int cmd_spin_left=0x7f080006;
         public static final int cmd_spin_right=0x7f080008;
         public static final int cmd_up=0x7f080005;
-        public static final int menuitem_control=0x7f080010;
-        public static final int menuitem_main=0x7f08000f;
-        public static final int menuitem_navdata=0x7f08000e;
-        public static final int ps3=0x7f08000a;
-        public static final int text_init=0x7f08000b;
-        public static final int text_navdata=0x7f08000c;
-        public static final int video=0x7f08000d;
+        public static final int menuitem_control=0x7f080011;
+        public static final int menuitem_main=0x7f080010;
+        public static final int menuitem_navdata=0x7f08000f;
+        public static final int ps3=0x7f08000b;
+        public static final int text_init=0x7f08000c;
+        public static final int text_navdata=0x7f08000d;
+        public static final int video=0x7f08000e;
     }
     public static final class layout {
         public static final int activity_control=0x7f030000;

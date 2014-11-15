@@ -99,4 +99,15 @@ public class DroneDanceMessage {
 			return new DroneDanceMessage(this);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "DroneDanceMessage{" +
+				"midAmplitude=" + midAmplitude +
+				", highAmplitude=" + highAmplitude +
+				", lowAmplitude=" + lowAmplitude +
+				", startTimestamp=" + startTimestamp +
+				", endTimestamp=" + endTimestamp +
+				'}';
+	}
 }

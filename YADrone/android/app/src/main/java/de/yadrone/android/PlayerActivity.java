@@ -34,10 +34,6 @@ public class PlayerActivity extends Activity implements OnPreparedListener, Medi
 
 	private DroneCommandThread thread;
 
-	private PlayerService mPlayerService;
-	private ServiceConnection mConnection;
-	private boolean mIsBound;
-
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.audio_player);
@@ -65,38 +61,12 @@ public class PlayerActivity extends Activity implements OnPreparedListener, Medi
 
 		Toast.makeText(this, "Playing " + fileName, Toast.LENGTH_LONG).show();
 
-		mConnection = new ServiceConnection() {
-			@Override
-			public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-				mPlayerService = ((PlayerService.LocalBinder) iBinder).getService();
-				mPlayerService.play(fileName);
-			}
-
-			@Override
-			public void onServiceDisconnected(ComponentName componentName) {
-				mPlayerService = null;
-			}
-		};
-		doBindService();
-
 	}
 
-	void doBindService() {
-		bindService(new Intent(this, PlayerService.class), mConnection, Context.BIND_AUTO_CREATE);
-		mIsBound = true;
-	}
-
-	void doUnbindService() {
-		if (mIsBound) {
-			unbindService(mConnection);
-			mIsBound = false;
-		}
-	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		doUnbindService();
 	}
 
 

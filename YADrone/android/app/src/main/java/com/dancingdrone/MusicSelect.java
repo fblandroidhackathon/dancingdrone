@@ -26,7 +26,7 @@ public class MusicSelect extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_select);
 
-        Wave wave = new Wave();
+        this.setTitle(getResources().getString(R.string.title_activity_music_select));
 
         // Set up list adapter.
         ContentResolver cr = getContentResolver();

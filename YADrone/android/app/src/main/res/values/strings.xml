@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">YADroneAndroid</string>
+    <string name="app_name">Dancing Drone</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_yadrone">YADrone</string>
-    <string name="title_activity_music_select">MusicSelect</string>
+    <string name="title_activity_music_select">Select a music track</string>
     <string name="action_settings">Settings</string>
 
 </resources>

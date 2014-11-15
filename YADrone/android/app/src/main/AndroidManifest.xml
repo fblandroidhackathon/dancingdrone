@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <application
             android:name=".YADroneApplication"
@@ -20,9 +22,10 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
 
+
         <activity
-                android:name=".MainActivity"
-                android:label="@string/title_activity_yadrone">
+            android:name="com.dancingdrone.MusicSelect"
+            android:label="@string/title_activity_music_select">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -31,12 +34,22 @@
         </activity>
 
         <activity
+                android:name=".MainActivity"
+                android:label="@string/title_activity_yadrone">
+        </activity>
+
+        <activity
                 android:name=".ControlActivity"
                 android:label="@string/title_activity_yadrone"/>
 
         <activity
-                android:name=".NavDataActivity"
+                android:name=".PlayerActivity"
                 android:label="@string/title_activity_yadrone"/>
+
+
+        <activity
+            android:name=".NavDataActivity"
+            android:label="@string/title_activity_yadrone"/>
 
         <activity
                 android:name="de.yadrone.android.videodeprecated.VideoActivity"

@@ -55,7 +55,7 @@ public class DroneHandler extends Handler {
 
         switch (movement) {
             case UP_DOWN:
-                drone.getCommandManager().up(speed);
+                drone.getCommandManager().down(speed);
                 break;
             case AHEAD_BACK:
                 drone.getCommandManager().backward(speed);
@@ -73,7 +73,7 @@ public class DroneHandler extends Handler {
 
         switch (movement) {
             case UP_DOWN:
-                drone.getCommandManager().down(speed);
+                drone.getCommandManager().up(speed);
                 break;
             case AHEAD_BACK:
                 drone.getCommandManager().forward(speed);

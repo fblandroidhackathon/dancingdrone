@@ -50,6 +50,7 @@ public class ControlActivity extends Activity {
 			@Override
 			public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
 				mPlayService = ((PlayService.LocalBinder)iBinder).getService();
+				mPlayService.play("daft.wav");
 			}
 
 			@Override

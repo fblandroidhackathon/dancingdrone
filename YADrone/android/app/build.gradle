@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "de.yadrone.android"
-        minSdkVersion 8
-        targetSdkVersion 8
+        minSdkVersion 16
+        targetSdkVersion 21
     }
 
     buildTypes {
@@ -20,4 +20,5 @@ android {
 
 dependencies {
     compile files('libs/yadrone_03.jar')
+    compile files('libs/musicg-1.4.2.0.jar')
 }

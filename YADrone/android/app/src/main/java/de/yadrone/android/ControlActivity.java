@@ -1,8 +1,12 @@
 package de.yadrone.android;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +31,11 @@ public class ControlActivity extends Activity {
 
 	private DroneCommandThread thread;
 
+	private PlayService mPlayService;
+	private ServiceConnection mConnection;
+
+	private boolean mIsBound;
+
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,7 +45,44 @@ public class ControlActivity extends Activity {
 		Toast.makeText(this, "Touch and hold the buttons", Toast.LENGTH_SHORT).show();
 
 		thread = ((YADroneApplication) getApplicationContext()).thread;
+
+		mConnection = new ServiceConnection() {
+			@Override
+			public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+				mPlayService = ((PlayService.LocalBinder)iBinder).getService();
+			}
+
+			@Override
+			public void onServiceDisconnected(ComponentName componentName) {
+				mPlayService = null;
+			}
+		};
+		doBindService();
 	}
+
+	void doBindService() {
+		// Establish a connection with the service.  We use an explicit
+		// class name because we want a specific service implementation that
+		// we know will be running in our own process (and thus won't be
+		// supporting component replacement by other applications).
+		bindService(new Intent(this, PlayService.class), mConnection, Context.BIND_AUTO_CREATE);
+		mIsBound = true;
+	}
+
+	void doUnbindService() {
+		if (mIsBound) {
+			// Detach our existing connection.
+			unbindService(mConnection);
+			mIsBound = false;
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		doUnbindService();
+	}
+
 
 	public void sendMockMessages(DroneCommandThread thread) {
 		for (int i = 0; i < 10; i++) {

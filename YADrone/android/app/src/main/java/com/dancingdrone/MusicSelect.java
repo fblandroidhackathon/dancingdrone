@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.musicg.wave.Wave;
+
 import de.yadrone.android.R;
 
 public class MusicSelect extends Activity {
@@ -13,6 +15,9 @@ public class MusicSelect extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_select);
+
+
+        Wave wave = new Wave();
     }
 
 

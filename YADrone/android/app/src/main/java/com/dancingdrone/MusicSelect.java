@@ -2,17 +2,21 @@ package com.dancingdrone;
 
 import android.app.ListActivity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.musicg.wave.Wave;
 
+import de.yadrone.android.PlayerActivity;
 import de.yadrone.android.R;
 
 public class MusicSelect extends ListActivity {
@@ -39,6 +43,18 @@ public class MusicSelect extends ListActivity {
                 new String[]{MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DATA},
                 new int[]{android.R.id.text1, android.R.id.text2});
         setListAdapter(adapter);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+
+        Intent intent = new Intent(this, PlayerActivity.class);
+        Bundle b = new Bundle();
+        b.putString(PlayerActivity.FILE_URI, "http://example.com");
+        b.putString(PlayerActivity.SONG_NAME, "Song name");
+        intent.putExtras(b);
+        startActivity(intent);
+        super.onListItemClick(l, v, position, id);
     }
 
     @Override

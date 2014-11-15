@@ -17,7 +17,7 @@ public class PlayerActivity extends Activity implements OnPreparedListener, Medi
     private static final String TAG = "AudioPlayer";
 
     public static final String FILE_URI = "AUDIO_FILE_URI";
-    private static final String SONG_NAME = "SONG_NAME";
+    public static final String SONG_NAME = "SONG_NAME";
 
     private MediaPlayer mMediaPlayer;
     private MediaController mMediaController;

@@ -40,7 +40,7 @@ public class MusicSelect extends ListActivity {
                 this, // Context.
                 android.R.layout.two_line_list_item,
                 cur,
-                new String[]{MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DISPLAY_NAME},
+                new String[]{MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DISPLAY_NAME},
                 new int[]{android.R.id.text1, android.R.id.text2});
         setListAdapter(adapter);
     }

@@ -40,7 +40,7 @@ public class MusicSelect extends ListActivity {
                 this, // Context.
                 android.R.layout.two_line_list_item,
                 cur,
-                new String[]{MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DATA},
+                new String[]{MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DISPLAY_NAME},
                 new int[]{android.R.id.text1, android.R.id.text2});
         setListAdapter(adapter);
     }
@@ -48,10 +48,16 @@ public class MusicSelect extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
+        Cursor c = ((SimpleCursorAdapter)l.getAdapter()).getCursor();
+        c.moveToPosition(position);
+
         Intent intent = new Intent(this, PlayerActivity.class);
         Bundle b = new Bundle();
-        b.putString(PlayerActivity.FILE_URI, "http://example.com");
-        b.putString(PlayerActivity.SONG_NAME, "Song name");
+
+        String uri = c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA));
+        String name = c.getString(c.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+        b.putParcelable(PlayerActivity.FILE_URI, Uri.parse(uri));
+        b.putString(PlayerActivity.SONG_NAME, name);
         intent.putExtras(b);
         startActivity(intent);
         super.onListItemClick(l, v, position, id);

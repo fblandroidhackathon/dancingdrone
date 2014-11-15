@@ -19,7 +19,7 @@ import java.io.InputStream;
 /**
  * Created by evelina on 15/11/14.
  */
-public class PlayService extends Service {
+public class PlayerService extends Service {
 
 	private HandlerThread mThread;
 	private PlayHandler mHandler;
@@ -52,8 +52,8 @@ public class PlayService extends Service {
 	}
 
 	public class LocalBinder extends Binder {
-		PlayService getService() {
-			return PlayService.this;
+		PlayerService getService() {
+			return PlayerService.this;
 		}
 	}
 

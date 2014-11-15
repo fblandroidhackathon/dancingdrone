@@ -1,12 +1,8 @@
 package de.yadrone.android;
 
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,15 +26,10 @@ public class ControlActivity extends Activity {
 	private final Random rand = new Random();
 
 	private DroneCommandThread thread;
-
-	private PlayService mPlayService;
-	private ServiceConnection mConnection;
-
-	private boolean mIsBound;
-    private IARDrone mDrone;
+	private IARDrone mDrone;
 
 
-    public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_control);
 
@@ -46,97 +37,60 @@ public class ControlActivity extends Activity {
 		Toast.makeText(this, "Touch and hold the buttons", Toast.LENGTH_SHORT).show();
 
 		thread = ((YADroneApplication) getApplicationContext()).thread;
-
-		mConnection = new ServiceConnection() {
-			@Override
-			public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-				mPlayService = ((PlayService.LocalBinder)iBinder).getService();
-				mPlayService.play("daft.wav");
-			}
-
-			@Override
-			public void onServiceDisconnected(ComponentName componentName) {
-				mPlayService = null;
-			}
-		};
-		doBindService();
 	}
 
-	void doBindService() {
-		// Establish a connection with the service.  We use an explicit
-		// class name because we want a specific service implementation that
-		// we know will be running in our own process (and thus won't be
-		// supporting component replacement by other applications).
-		bindService(new Intent(this, PlayService.class), mConnection, Context.BIND_AUTO_CREATE);
-		mIsBound = true;
+
+	public void sendMockMessages(DroneCommandThread thread) {
+		//sendRandomMovements(thread);
+		sendCoreography(thread);
 	}
 
-	void doUnbindService() {
-		if (mIsBound) {
-			// Detach our existing connection.
-			unbindService(mConnection);
-			mIsBound = false;
+	private void sendCoreography(DroneCommandThread thread) {
+		int length = 800;
+
+		for (int i = 0; i < 2; i++) {
+			DroneDanceMessage msg = createMsg(length, 100, 10, 10);
+			thread.sendMessage(msg);
+		}
+		for (int i = 0; i < 2; i++) {
+			DroneDanceMessage msg = createMsg(length, 10, 100, 10);
+			thread.sendMessage(msg);
+		}
+		for (int i = 0; i < 2; i++) {
+			DroneDanceMessage msg = createMsg(length, 10, 10, 100);
+			thread.sendMessage(msg);
+		}
+		mDrone.getCommandManager().landing();
+
+	}
+
+	private DroneDanceMessage createMsg(int length, int high, int low, int mid) {
+		return new DroneDanceMessage.Builder()
+				.startTimestamp(System.currentTimeMillis())
+				.endTimestamp(System.currentTimeMillis() + length)
+				.highAmplitude(high)
+				.lowAmplitude(low)
+				.midAmplitude(mid)
+				.build();
+	}
+
+
+	private void sendRandomMovements(DroneCommandThread thread) {
+		for (int i = 0; i < 10; i++) {
+			DroneDanceMessage msg = new DroneDanceMessage.Builder()
+					.startTimestamp(System.currentTimeMillis())
+					.endTimestamp(System.currentTimeMillis() + (300 + rand.nextInt(700)))
+					.highAmplitude(20 + rand.nextInt(81))
+					.lowAmplitude(20 + rand.nextInt(81))
+					.midAmplitude(20 + rand.nextInt(81))
+					.build();
+			thread.sendMessage(msg);
 		}
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		doUnbindService();
-	}
-
-
-    public void sendMockMessages(DroneCommandThread thread) {
-        //sendRandomMovements(thread);
-        sendCoreography(thread);
-    }
-
-    private void sendCoreography(DroneCommandThread thread) {
-        int length = 800;
-
-        for (int i = 0; i < 2; i++) {
-            DroneDanceMessage msg = createMsg(length, 100, 10, 10);
-            thread.sendMessage(msg);
-        }
-        for (int i = 0; i < 2; i++) {
-            DroneDanceMessage msg = createMsg(length, 10, 100, 10);
-            thread.sendMessage(msg);
-        }
-        for (int i = 0; i < 2; i++) {
-            DroneDanceMessage msg = createMsg(length, 10, 10, 100);
-            thread.sendMessage(msg);
-        }
-        mDrone.getCommandManager().landing();
-
-    }
-
-    private DroneDanceMessage createMsg(int length, int high, int low, int mid) {
-        return new DroneDanceMessage.Builder()
-                .startTimestamp(System.currentTimeMillis())
-                .endTimestamp(System.currentTimeMillis() + length)
-                .highAmplitude(high)
-                .lowAmplitude(low)
-                .midAmplitude(mid)
-                .build();
-    }
-
-
-    private void sendRandomMovements(DroneCommandThread thread) {
-        for (int i = 0; i < 10; i++) {
-            DroneDanceMessage msg = new DroneDanceMessage.Builder()
-                    .startTimestamp(System.currentTimeMillis())
-                    .endTimestamp(System.currentTimeMillis() + (300 + rand.nextInt(700)))
-                    .highAmplitude(20 + rand.nextInt(81))
-                    .lowAmplitude(20 + rand.nextInt(81))
-                    .midAmplitude(20 + rand.nextInt(81))
-                    .build();
-            thread.sendMessage(msg);
-        }
-    }
-
 	private void initButtons() {
 		YADroneApplication app = (YADroneApplication) getApplication();
-        mDrone = app.getARDrone();
+		mDrone = app.getARDrone();
 
 		Button forward = (Button) findViewById(R.id.cmd_forward);
 		forward.setOnTouchListener(new OnTouchListener() {

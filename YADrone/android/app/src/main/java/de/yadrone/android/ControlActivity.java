@@ -35,9 +35,10 @@ public class ControlActivity extends Activity {
 	private ServiceConnection mConnection;
 
 	private boolean mIsBound;
+    private IARDrone mDrone;
 
 
-	public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_control);
 
@@ -84,30 +85,65 @@ public class ControlActivity extends Activity {
 	}
 
 
-	public void sendMockMessages(DroneCommandThread thread) {
-		for (int i = 0; i < 10; i++) {
-			DroneDanceMessage msg = new DroneDanceMessage.Builder()
-					.startTimestamp(System.currentTimeMillis())
-					.endTimestamp(System.currentTimeMillis() + (300 + rand.nextInt(700)))
-					.highAmplitude(20 + rand.nextInt(81))
-					.lowAmplitude(20 + rand.nextInt(81))
-					.midAmplitude(20 + rand.nextInt(81))
-					.build();
-			thread.sendMessage(msg);
-		}
-	}
+    public void sendMockMessages(DroneCommandThread thread) {
+        //sendRandomMovements(thread);
+        sendCoreography(thread);
+    }
+
+    private void sendCoreography(DroneCommandThread thread) {
+        int length = 800;
+
+        for (int i = 0; i < 2; i++) {
+            DroneDanceMessage msg = createMsg(length, 100, 10, 10);
+            thread.sendMessage(msg);
+        }
+        for (int i = 0; i < 2; i++) {
+            DroneDanceMessage msg = createMsg(length, 10, 100, 10);
+            thread.sendMessage(msg);
+        }
+        for (int i = 0; i < 2; i++) {
+            DroneDanceMessage msg = createMsg(length, 10, 10, 100);
+            thread.sendMessage(msg);
+        }
+        mDrone.getCommandManager().landing();
+
+    }
+
+    private DroneDanceMessage createMsg(int length, int high, int low, int mid) {
+        return new DroneDanceMessage.Builder()
+                .startTimestamp(System.currentTimeMillis())
+                .endTimestamp(System.currentTimeMillis() + length)
+                .highAmplitude(high)
+                .lowAmplitude(low)
+                .midAmplitude(mid)
+                .build();
+    }
+
+
+    private void sendRandomMovements(DroneCommandThread thread) {
+        for (int i = 0; i < 10; i++) {
+            DroneDanceMessage msg = new DroneDanceMessage.Builder()
+                    .startTimestamp(System.currentTimeMillis())
+                    .endTimestamp(System.currentTimeMillis() + (300 + rand.nextInt(700)))
+                    .highAmplitude(20 + rand.nextInt(81))
+                    .lowAmplitude(20 + rand.nextInt(81))
+                    .midAmplitude(20 + rand.nextInt(81))
+                    .build();
+            thread.sendMessage(msg);
+        }
+    }
 
 	private void initButtons() {
 		YADroneApplication app = (YADroneApplication) getApplication();
-		final IARDrone drone = app.getARDrone();
+        mDrone = app.getARDrone();
 
 		Button forward = (Button) findViewById(R.id.cmd_forward);
 		forward.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().forward(20);
+					mDrone.getCommandManager().forward(20);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -117,9 +153,9 @@ public class ControlActivity extends Activity {
 		backward.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().backward(20);
+					mDrone.getCommandManager().backward(20);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -130,9 +166,9 @@ public class ControlActivity extends Activity {
 		left.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().goLeft(20);
+					mDrone.getCommandManager().goLeft(20);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -143,9 +179,9 @@ public class ControlActivity extends Activity {
 		right.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().goRight(20);
+					mDrone.getCommandManager().goRight(20);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -155,9 +191,9 @@ public class ControlActivity extends Activity {
 		up.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().up(40);
+					mDrone.getCommandManager().up(40);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -167,9 +203,9 @@ public class ControlActivity extends Activity {
 		down.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().down(40);
+					mDrone.getCommandManager().down(40);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -180,9 +216,9 @@ public class ControlActivity extends Activity {
 		spinLeft.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().spinLeft(20);
+					mDrone.getCommandManager().spinLeft(20);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -193,9 +229,9 @@ public class ControlActivity extends Activity {
 		spinRight.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					drone.getCommandManager().spinRight(20);
+					mDrone.getCommandManager().spinRight(20);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
-					drone.hover();
+					mDrone.hover();
 
 				return true;
 			}
@@ -207,10 +243,10 @@ public class ControlActivity extends Activity {
 
 			public void onClick(View v) {
 				if (!isFlying) {
-					drone.takeOff();
+					mDrone.takeOff();
 					landing.setText("Landing");
 				} else {
-					drone.landing();
+					mDrone.landing();
 					landing.setText("Take Off");
 				}
 				isFlying = !isFlying;
@@ -221,14 +257,14 @@ public class ControlActivity extends Activity {
 		freeze.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				drone.freeze();
+				mDrone.freeze();
 			}
 		});
 
 		Button emergency = (Button) findViewById(R.id.cmd_emergency);
 		emergency.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				drone.reset();
+				mDrone.reset();
 			}
 		});
 

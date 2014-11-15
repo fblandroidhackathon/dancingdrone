@@ -114,6 +114,19 @@
                     android:text="Freeze" />
         </TableRow>
 
+        <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+            <Button
+                    android:id="@+id/cmd_dance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:padding="20dip"
+                    android:text="DANCE!" />
+        </TableRow>
+
     </TableLayout>
 
     <Button

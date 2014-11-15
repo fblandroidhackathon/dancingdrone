@@ -24,7 +24,7 @@ public class DroneCommandThread extends HandlerThread {
     }
 
     public void sendMessage(DroneDanceMessage message) {
-        Message msg = new Message();
+        Message msg = Message.obtain(d_handler);
         msg.obj = message;
         d_handler.sendMessage(msg);
     }

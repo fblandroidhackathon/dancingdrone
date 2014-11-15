@@ -3,6 +3,7 @@ package de.yadrone.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,17 +14,41 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.LinkedList;
+import java.util.Random;
+
 import de.yadrone.base.IARDrone;
 
 public class ControlActivity extends Activity {
+
+	public LinkedList<Message> messages = new LinkedList<Message>();
+
+	private final Random rand = new Random();
+
+	private DroneCommandThread thread;
+
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_control);
 
 		initButtons();
-
 		Toast.makeText(this, "Touch and hold the buttons", Toast.LENGTH_SHORT).show();
+
+		thread = ((YADroneApplication) getApplicationContext()).thread;
+	}
+
+	public void sendMockMessages(DroneCommandThread thread) {
+		for (int i = 0; i < 10; i++) {
+			DroneDanceMessage msg = new DroneDanceMessage.Builder()
+					.startTimestamp(System.currentTimeMillis())
+					.endTimestamp(System.currentTimeMillis() + (300 + rand.nextInt(700)))
+					.highAmplitude(20 + rand.nextInt(81))
+					.lowAmplitude(20 + rand.nextInt(81))
+					.midAmplitude(20 + rand.nextInt(81))
+					.build();
+			thread.sendMessage(msg);
+		}
 	}
 
 	private void initButtons() {
@@ -160,6 +185,21 @@ public class ControlActivity extends Activity {
 				drone.reset();
 			}
 		});
+
+		findViewById(R.id.cmd_dance).setOnClickListener(new OnClickListener() {
+			boolean isDancing = false;
+
+			@Override
+			public void onClick(View view) {
+				if (!isDancing) {
+					dance();
+				}
+			}
+		});
+	}
+
+	private void dance() {
+		sendMockMessages(thread);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

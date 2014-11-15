@@ -1,1 +1,6 @@
 /YADrone/android/app/build
+.idea
+YADrone/android/.idea/libraries/yadrone_03.xml
+YADrone/android/.idea/misc.xml
+app.iml
+local.properties
